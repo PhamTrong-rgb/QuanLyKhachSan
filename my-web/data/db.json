@@ -1,0 +1,37 @@
+{
+  "rooms": [
+    {
+      "id": "101",
+      "type": "Tiêu chuẩn",
+      "status": "Sẵn sàng",
+      "price": "1.000.000",
+      "maxGuests": 2,
+      "view": "Thành phố"
+    }
+  ],
+  "guests": [
+    {
+      "id": "KH001",
+      "fullName": "Nguyễn Thành Nam",
+      "phonenumber": "0123456789",
+      "email": ""
+    }
+  ],
+  "employees": [],
+  "transactions": [],
+  "bookings": [
+    {
+      "id": "WEB-0001",
+      "guest": "Nguyễn Thành Nam",
+      "phone": "0123456789",
+      "room": "101",
+      "checkIn": "2026-05-23",
+      "checkOut": "2026-05-29",
+      "status": "Đã xác nhận",
+      "description": "Đặt phòng từ trang người dùng",
+      "adminNote": ""
+    }
+  ],
+  "invoices": [],
+  "requests": []
+}

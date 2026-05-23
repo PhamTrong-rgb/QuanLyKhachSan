@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Bookings {
+  id            String         @id @db.NVarChar(50)
+  roomId        String?        @db.NVarChar(50)
+  customerName  String?        @db.NVarChar(100)
+  checkIn       DateTime?      @db.DateTime
+  checkOut      DateTime?      @db.DateTime
+  pricePerNight Decimal        @db.Decimal(18, 2)
+  totalPrice    Decimal?       @default(0, map: "DF__Bookings__totalP__1CBC4616") @db.Decimal(18, 2)
+  status        String?        @default("Pending", map: "DF__Bookings__status__1DB06A4F") @db.NVarChar(20)
+  Transactions  Transactions[]
+}
+
+model BookingServices {
+  id           String    @id(map: "PK__BookingS__3213E83FD243EB69") @db.NVarChar(50)
+  bookingId    String    @db.NVarChar(50)
+  serviceId    String    @db.NVarChar(50)
+  quantity     Int?      @default(1, map: "DF__BookingSe__quant__2180FB33")
+  orderDate    DateTime? @default(now(), map: "DF__BookingSe__order__22751F6C") @db.DateTime
+  priceAtOrder Decimal   @db.Decimal(18, 2)
+}
+
+model Customers {
+  id          String  @id(map: "PK__Customer__3213E83F328D593E") @db.NVarChar(50)
+  fullName    String  @db.NVarChar(100)
+  phonenumber String? @db.VarChar(20)
+  email       String? @db.VarChar(100)
+  idCard      String  @db.VarChar(20)
+}
+
+model Rooms {
+  id         String  @id(map: "PK__Rooms__3213E83F6529E5ED") @db.NVarChar(50)
+  roomNumber Int
+  type       String  @db.NVarChar(50)
+  price      Decimal @db.Decimal(18, 2)
+  status     String? @default("Available", map: "DF__Rooms__status__151B244E") @db.NVarChar(20)
+  image      String? @db.NVarChar(Max)
+}
+
+model Services {
+  id          String  @id(map: "PK__Services__3213E83F27C22204") @db.NVarChar(50)
+  serviceName String  @db.NVarChar(100)
+  price       Decimal @db.Decimal(18, 2)
+  description String? @db.NVarChar(255)
+}
+
+model Staff {
+  id     String  @id(map: "PK__Staff__3213E83F9AFE5A8D") @db.NVarChar(50)
+  name   String  @db.NVarChar(100)
+  role   String? @db.NVarChar(50)
+  avatar String? @db.NVarChar(Max)
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B6103A75332") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model Transactions {
+  id              String    @id(map: "PK__Transact__3213E83F46AA4DB2") @db.NVarChar(50)
+  bookingId       String?   @db.NVarChar(50)
+  amount          Decimal   @db.Decimal(18, 2)
+  paymentMethod   String?   @default("Cash", map: "DF__Transacti__payme__2739D489") @db.NVarChar(50)
+  transactionDate DateTime? @default(now(), map: "DF__Transacti__trans__282DF8C2") @db.DateTime
+  status          String?   @default("Success", map: "DF__Transacti__statu__29221CFB") @db.NVarChar(20)
+  Bookings        Bookings? @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_Transactions_Bookings")
+}
+
+model Users {
+  id       String  @id(map: "PK__Users__3213E83F2CCD8217") @db.NVarChar(50)
+  username String  @unique(map: "UQ__Users__F3DBC572162D1022") @db.NVarChar(50)
+  password String  @db.NVarChar(255)
+  role     String? @default("Staff", map: "DF__Users__role__0F624AF8") @db.NVarChar(20)
+  avatar   String? @db.NVarChar(Max)
+}
