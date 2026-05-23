@@ -7,7 +7,7 @@ import Select from "@/components/ui/select";
 import { useHotel } from "@/app/contexts/HotelContext";
 
 export default function InvoicesPage() {
-  const { invoices, addInvoice, updateInvoice, deleteInvoice, bookings, updateBooking, rooms } = useHotel();
+  const { invoices, addInvoice, updateInvoice, deleteInvoice, bookings, updateBooking, rooms, requests } = useHotel();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [hotelName, setHotelName] = useState("GRAND LUXE HOTEL");
@@ -88,13 +88,36 @@ export default function InvoicesPage() {
     if (!booking) return null;
 
     const room = rooms.find(r => r.id === booking.room);
-    const roomPrice = room ? parseInt(room.price.replace(/,/g, '')) : 0;
-    
+    const roomPrice = room ? parseInt(String(room.price).replace(/[^0-9]/g, '')) : 0;
+
+    // Compute nights correctly using Date objects. Accepts 'YYYY-MM-DD' or 'DD/MM/YYYY'.
+    const parseToDate = (s: string) => {
+      if (!s) return null;
+      if (s.includes('-')) {
+        const d = new Date(s);
+        return isNaN(d.getTime()) ? null : d;
+      }
+      if (s.includes('/')) {
+        const parts = s.split('/');
+        if (parts.length === 3) {
+          const day = parseInt(parts[0], 10) || 0;
+          const month = (parseInt(parts[1], 10) || 1) - 1;
+          const year = parseInt(parts[2], 10) || 0;
+          const d = new Date(year, month, day);
+          return isNaN(d.getTime()) ? null : d;
+        }
+      }
+      const d = new Date(s);
+      return isNaN(d.getTime()) ? null : d;
+    };
+
+    const inDate = parseToDate(checkInDate);
+    const outDate = parseToDate(checkOutDate);
     let days = 1;
-    if (checkInDate && checkOutDate) {
-      const inDay = parseInt(checkInDate.split('/')[0]) || 0;
-      const outDay = parseInt(checkOutDate.split('/')[0]) || 0;
-      if (outDay > inDay) days = outDay - inDay;
+    if (inDate && outDate) {
+      const diffMs = outDate.getTime() - inDate.getTime();
+      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+      days = diffDays > 0 ? diffDays : 1;
     }
 
     const roomTotal = roomPrice * days;
@@ -320,10 +343,30 @@ export default function InvoicesPage() {
               value={selectedBookingId} 
               onChange={(val) => {
                 setSelectedBookingId(val);
-                setCustomServices([]);
                 const booking = bookings.find((item) => item.id === val);
                 setCheckInDate(booking?.checkIn || "");
                 setCheckOutDate(booking?.checkOut || "");
+
+                // Prefill service costs from service requests for this booking's room/guest
+                const SERVICE_PRICE_MAP: Record<string, number> = {
+                  'Dọn dẹp phòng': 50000,
+                  'Gọi Đồ Ăn': 150000,
+                  'Massage thư giãn': 500000,
+                  'Yêu cầu khác': 0
+                };
+
+                if (booking) {
+                  const related = (requests || []).filter(r => (r.room === booking.room) || (r.guest === booking.guest));
+                  if (related.length > 0) {
+                    const pre = related.map((r, idx) => ({ id: r.id || `svc-${idx}`, name: r.type, price: SERVICE_PRICE_MAP[r.type] || 0 }));
+                    setCustomServices(pre);
+                  } else {
+                    setCustomServices([]);
+                  }
+                } else {
+                  setCustomServices([]);
+                }
+                setSelectedBookingId(val);
               }} 
               className={`w-full neo-input py-2.5 px-4 ${isEdit ? "opacity-50" : ""}`}
               placeholder="-- Chọn Đơn đặt phòng --"

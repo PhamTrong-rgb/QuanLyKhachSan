@@ -34,6 +34,9 @@ html {
 
   --font-sans: "Times New Roman", Times, serif;
   --font-mono: "Times New Roman", Times, serif;
+  /* Use Calibri across the app */
+  --font-sans: Calibri, "Segoe UI", Tahoma, Geneva, sans-serif;
+  --font-mono: Calibri, "Segoe UI", Tahoma, Geneva, sans-serif;
 
   --radius-control: 18px;
   --radius-surface: 20px;
@@ -118,6 +121,43 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
 }
+
+/* Dashboard specific increases for admin pages (bigger headers/controls) */
+.dashboard-root table thead th {
+  font-size: 13px; /* slightly larger */
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-root .neo-input {
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-root .neo-button-primary,
+.dashboard-root .neo-button {
+  padding: 0.85rem 1.25rem;
+}
+
+.dashboard-root .w-12.h-12 {
+  width: 56px; height: 56px;
+}
+
+/* Larger admin headings and card labels */
+.dashboard-root h1, .dashboard-root h2, .dashboard-root h3 {
+  font-size: 1.25rem;
+}
+
+.dashboard-root .neo-surface .text-2xl, .dashboard-root .neo-surface h2, .dashboard-root .neo-surface h3 {
+  font-size: 1.125rem;
+}
+
+.dashboard-root .text-sm { font-size: 0.95rem; }
+.dashboard-root .text-xs { font-size: 0.82rem; }
+
+/* Slightly larger table rows & labels */
+.dashboard-root table tbody td { font-size: 0.98rem; }
+
+/* Make small captions more readable */
+.dashboard-root .opacity-50 { opacity: 0.9; }
 
 button,
 input,

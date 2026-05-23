@@ -98,14 +98,36 @@ export default function InvoicesPage() {
     if (!booking) return null;
 
     const room = rooms.find(r => r.id === booking.room);
-    const roomPrice = room ? parseInt(room.price.replace(/,/g, '')) : 0;
+    const roomPrice = room ? parseInt(String(room.price).replace(/[^0-9]/g, '')) : 0;
     
-    // Tính số ngày
+    // Tính số đêm (hỗ trợ cả 'YYYY-MM-DD' và 'DD/MM/YYYY')
+    const parseToDate = (s: string) => {
+      if (!s) return null;
+      if (s.includes('-')) {
+        const d = new Date(s);
+        return isNaN(d.getTime()) ? null : d;
+      }
+      if (s.includes('/')) {
+        const parts = s.split('/');
+        if (parts.length === 3) {
+          const day = parseInt(parts[0], 10) || 0;
+          const month = (parseInt(parts[1], 10) || 1) - 1;
+          const year = parseInt(parts[2], 10) || 0;
+          const d = new Date(year, month, day);
+          return isNaN(d.getTime()) ? null : d;
+        }
+      }
+      const d = new Date(s);
+      return isNaN(d.getTime()) ? null : d;
+    };
+
+    const inDate = parseToDate(checkInDate);
+    const outDate = parseToDate(checkOutDate);
     let days = 1;
-    if (checkInDate && checkOutDate) {
-      const inDay = parseInt(checkInDate.split('/')[0]) || 0;
-      const outDay = parseInt(checkOutDate.split('/')[0]) || 0;
-      if (outDay > inDay) days = outDay - inDay;
+    if (inDate && outDate) {
+      const diffMs = outDate.getTime() - inDate.getTime();
+      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+      days = diffDays > 0 ? diffDays : 1;
     }
 
     const roomTotal = roomPrice * days;

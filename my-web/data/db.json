@@ -1,37 +1,124 @@
 {
-  "rooms": [
-    {
-      "id": "101",
-      "type": "Tiêu chuẩn",
-      "status": "Sẵn sàng",
-      "price": "1.000.000",
-      "maxGuests": 2,
-      "view": "Thành phố"
-    }
-  ],
+  "rooms": [],
   "guests": [
     {
       "id": "KH001",
-      "fullName": "Nguyễn Thành Nam",
-      "phonenumber": "0123456789",
+      "fullName": "Nguyên An",
+      "phonenumber": "099876355",
       "email": ""
     }
   ],
-  "employees": [],
-  "transactions": [],
+  "employees": [
+    {
+      "id": "NV003",
+      "name": "Trần Thị Mai",
+      "phone": "055487326",
+      "role": "Phục vụ bếp",
+      "department": "Bếp",
+      "email": "",
+      "status": "active",
+      "avatar": "T"
+    },
+    {
+      "id": "NV002",
+      "name": "Nguyễn Minh Nam",
+      "phone": "097656421",
+      "role": "Lễ tân khách sạn",
+      "department": "Lễ tân",
+      "email": "",
+      "status": "active",
+      "avatar": "N"
+    },
+    {
+      "id": "NV001",
+      "name": "Trần A Mẫn",
+      "phone": "028876065",
+      "role": "Lao công  dọn dẹp",
+      "department": "Buồng phòng",
+      "email": "",
+      "status": "active",
+      "avatar": "T"
+    }
+  ],
   "bookings": [
     {
       "id": "WEB-0001",
-      "guest": "Nguyễn Thành Nam",
-      "phone": "0123456789",
-      "room": "101",
-      "checkIn": "2026-05-23",
-      "checkOut": "2026-05-29",
+      "guest": "Nguyên An",
+      "phone": "099876355",
+      "room": "102",
+      "checkIn": "2026-05-22",
+      "checkOut": "2026-05-25",
       "status": "Đã xác nhận",
       "description": "Đặt phòng từ trang người dùng",
       "adminNote": ""
     }
   ],
-  "invoices": [],
-  "requests": []
+  "transactions": [
+    {
+      "id": "TXN-4915",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-7719 (Nguyên An)",
+      "amount": 12050000,
+      "date": "23/5/2026",
+      "time": "22:30",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    },
+    {
+      "id": "TXN-5215",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-7673 (Nguyên An)",
+      "amount": 11400000,
+      "date": "23/5/2026",
+      "time": "22:02",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    }
+  ],
+  "invoices": [
+    {
+      "id": "INV-7719",
+      "guest": "Nguyên An",
+      "roomId": "102",
+      "amount": "12.050.000",
+      "status": "Đã thanh toán",
+      "date": "23/5/2026",
+      "details": [
+        {
+          "name": "Tiền phòng 102 (3 đêm)",
+          "price": 11400000
+        },
+        {
+          "name": "Dịch vụ: Massage thư giãn",
+          "price": 500000
+        },
+        {
+          "name": "Dịch vụ: Gọi Đồ Ăn",
+          "price": 150000
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "id": "SRV-800",
+      "guest": "Nguyên An",
+      "room": "102",
+      "type": "Massage thư giãn",
+      "time": "22:20",
+      "status": "Hoàn tất"
+    },
+    {
+      "id": "SRV-584",
+      "guest": "Nguyên An",
+      "room": "102",
+      "type": "Gọi Đồ Ăn",
+      "time": "22:07",
+      "status": "Hoàn tất"
+    }
+  ]
 }

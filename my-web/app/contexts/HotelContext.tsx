@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { getDBData, modifyDBData } from '../actions/db';
+import { DEFAULT_PUBLIC_ROOMS } from '@/lib/hotel-storage';
 import { pushAdminNotification } from '@/lib/hotel-storage';
 import type { AdminNotification } from '@/lib/hotel-storage';
 
@@ -132,13 +133,43 @@ export function HotelProvider({ children }: { children: ReactNode }) {
 
   const fetchDB = () => {
     getDBData().then(data => {
-      setRoomsState(data.rooms || []);
+      // If server DB has no rooms, fallback to default public rooms so admin view isn't empty
+      setRoomsState((data.rooms && data.rooms.length > 0) ? data.rooms : DEFAULT_PUBLIC_ROOMS);
       setGuestsState(data.guests || []);
       setBookingsState(data.bookings || []);
       setInvoicesState(data.invoices || []);
       setRequestsState(data.requests || []);
       setEmployeesState(data.employees || []);
       setTransactionsState(data.transactions || []);
+
+      // Backfill transactions from paid invoices if missing
+      try {
+        const existingTxDesc = (data.transactions || []).map((t: any) => t.description || '');
+        const paidInvoices = (data.invoices || []).filter((inv: any) => inv.status === 'Đã thanh toán');
+        const missing = paidInvoices.filter((inv: any) => !existingTxDesc.some((d: string) => d.includes(inv.id)));
+        if (missing.length > 0) {
+          missing.forEach((inv: any) => {
+            const amount = parseInt(String(inv.amount).replace(/[^0-9]/g, '') || '0', 10);
+            const txn = {
+              id: `TXN-${Math.floor(1000 + Math.random() * 9000)}`,
+              type: 'income',
+              description: `Thanh toán hóa đơn ${inv.id} (${inv.guest})`,
+              amount,
+              date: new Date().toLocaleDateString('vi-VN'),
+              time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+              status: 'completed',
+              paymentMethod: 'Cash',
+              user: 'SYSTEM',
+              note: ''
+            };
+            modifyDBData('transactions', 'add', txn);
+          });
+          // refetch after write
+          setTimeout(() => fetchDB(), 300);
+        }
+      } catch (err) {
+        // ignore backfill errors
+      }
       setIsLoaded(true);
     });
   };
@@ -236,8 +267,69 @@ export function HotelProvider({ children }: { children: ReactNode }) {
   const deleteBooking = (id: string) => { const newVal = bookings.filter(b => b.id !== id); setBookingsState(newVal); execDB('bookings', 'delete', id); notify("Hủy Booking", `Đã hủy đơn ${id}`, "alert", "/bookings"); };
 
   // CRUD for Invoices
-  const addInvoice = (invoice: Invoice) => { const newVal = [invoice, ...invoices]; setInvoicesState(newVal); execDB('invoices', 'add', invoice); notify("Hóa đơn mới", `Khởi tạo hóa đơn ${invoice.id}`, "checkout", "/invoices"); };
-  const updateInvoice = (invoice: Invoice) => { const newVal = invoices.map(i => i.id === invoice.id ? invoice : i); setInvoicesState(newVal); execDB('invoices', 'update', invoice); notify("Cập nhật hóa đơn", `Hóa đơn ${invoice.id} đã cập nhật`, "checkout", "/invoices"); };
+  const parseAmount = (amt: string | number | undefined) => {
+    if (!amt && amt !== 0) return 0;
+    if (typeof amt === 'number') return amt;
+    const cleaned = String(amt).replace(/[^0-9]/g, '');
+    return parseInt(cleaned || '0', 10);
+  };
+
+  const addInvoice = (invoice: Invoice) => {
+    const newVal = [invoice, ...invoices];
+    setInvoicesState(newVal);
+    execDB('invoices', 'add', invoice);
+    notify("Hóa đơn mới", `Khởi tạo hóa đơn ${invoice.id}`, "checkout", "/invoices");
+
+    // Nếu hóa đơn được đánh là đã thanh toán ngay khi tạo, tự động sinh giao dịch thu
+    if (invoice.status === 'Đã thanh toán') {
+      const amount = parseAmount(invoice.amount);
+      const txn = {
+        id: `TXN-${Math.floor(1000 + Math.random() * 9000)}`,
+        type: 'income',
+        description: `Thanh toán hóa đơn ${invoice.id} (${invoice.guest})`,
+        amount,
+        date: new Date().toLocaleDateString('vi-VN'),
+        time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+        status: 'completed',
+        paymentMethod: 'Cash',
+        user: 'SYSTEM',
+        note: ''
+      } as Transaction;
+      const newTx = [txn, ...transactions];
+      setTransactionsState(newTx);
+      execDB('transactions', 'add', txn);
+      notify("Giao dịch mới", `Đã ghi nhận thu: ${amount.toLocaleString('vi-VN')} VNĐ`, "checkout", "/transactions");
+    }
+  };
+
+  const updateInvoice = (invoice: Invoice) => {
+    const existing = invoices.find(i => i.id === invoice.id);
+    const newVal = invoices.map(i => i.id === invoice.id ? invoice : i);
+    setInvoicesState(newVal);
+    execDB('invoices', 'update', invoice);
+    notify("Cập nhật hóa đơn", `Hóa đơn ${invoice.id} đã cập nhật`, "checkout", "/invoices");
+
+    // Nếu trạng thái chuyển từ chưa thanh toán -> đã thanh toán, sinh giao dịch
+    if (existing && existing.status !== 'Đã thanh toán' && invoice.status === 'Đã thanh toán') {
+      const amount = parseAmount(invoice.amount);
+      const txn = {
+        id: `TXN-${Math.floor(1000 + Math.random() * 9000)}`,
+        type: 'income',
+        description: `Thanh toán hóa đơn ${invoice.id} (${invoice.guest})`,
+        amount,
+        date: new Date().toLocaleDateString('vi-VN'),
+        time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+        status: 'completed',
+        paymentMethod: 'Cash',
+        user: 'SYSTEM',
+        note: ''
+      } as Transaction;
+      const newTx = [txn, ...transactions];
+      setTransactionsState(newTx);
+      execDB('transactions', 'add', txn);
+      notify("Giao dịch mới", `Đã ghi nhận thu: ${amount.toLocaleString('vi-VN')} VNĐ`, "checkout", "/transactions");
+    }
+  };
   const deleteInvoice = (id: string) => { const newVal = invoices.filter(i => i.id !== id); setInvoicesState(newVal); execDB('invoices', 'delete', id); notify("Xóa hóa đơn", `Đã xóa hóa đơn ${id}`, "alert", "/invoices"); };
 
   // CRUD for Requests

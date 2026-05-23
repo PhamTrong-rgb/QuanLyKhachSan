@@ -5,6 +5,8 @@ import { CalendarCheck, CheckCircle2, DoorOpen, Phone, UserRound } from "lucide-
 import { useEffect, useMemo, useState } from "react";
 import Select from "@/components/ui/select";
 import { useHotel } from "@/app/contexts/HotelContext";
+import { getPublicRooms } from '@/lib/hotel-storage';
+import { formatVND } from '@/lib/format';
 
 export default function HotelBookingPage() {
   const { rooms, addBooking, bookings } = useHotel();
@@ -20,7 +22,12 @@ export default function HotelBookingPage() {
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const selectedRoom = new URLSearchParams(window.location.search).get("room") || rooms[0]?.id || "101";
+      const urlRoom = new URLSearchParams(window.location.search).get("room");
+      const publicRooms = getPublicRooms();
+      const sourceRooms = (rooms && rooms.length > 0) ? rooms : publicRooms;
+
+      // prefer URL param if it exists and matches an available room id
+      const selectedRoom = urlRoom && sourceRooms.find(r => r.id === urlRoom) ? urlRoom : (sourceRooms[0]?.id || "101");
 
       setFormData((prev) => ({
         ...prev,
@@ -32,9 +39,11 @@ export default function HotelBookingPage() {
     return () => window.clearTimeout(timeout);
   }, [rooms]);
 
+  const combinedRooms = (rooms && rooms.length > 0) ? rooms : getPublicRooms();
+
   const selectedRoom = useMemo(
-    () => rooms.find((room) => room.id === formData.room),
-    [rooms, formData.room],
+    () => combinedRooms.find((room) => room.id === formData.room),
+    [combinedRooms, formData.room],
   );
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -123,7 +132,7 @@ export default function HotelBookingPage() {
                 value={formData.room}
                 onChange={(value) => setFormData({ ...formData, room: value })}
                 className="w-full text-sm font-bold"
-                options={rooms.map((room) => ({
+                options={combinedRooms.map((room) => ({
                   value: room.id,
                   label: `Phòng ${room.id} - ${room.type}`,
                 }))}
@@ -193,7 +202,7 @@ export default function HotelBookingPage() {
               </div>
               <div className="neo-pressed flex justify-between p-3">
                 <span>Giá mỗi đêm</span>
-                <span>{selectedRoom.price}đ</span>
+                <span>{formatVND(selectedRoom.price)}đ</span>
               </div>
             </div>
           )}

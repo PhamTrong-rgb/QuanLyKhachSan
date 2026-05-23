@@ -5,6 +5,7 @@ import { Search, Plus, Edit, Trash2, BedDouble, Filter, Loader2, Image as ImageI
 import Modal from "@/components/ui/modal";
 import Select from "@/components/ui/select";
 import { useHotel } from "@/app/contexts/HotelContext";
+import { formatVND } from '@/lib/format';
 
 export default function RoomsPage() {
   const { rooms, addRoom, updateRoom, deleteRoom } = useHotel();
@@ -134,7 +135,7 @@ export default function RoomsPage() {
                     )}
                   </td>
                   <td className="p-4">
-                    <p className="font-bold text-[var(--color-text)]">{Number(room.price).toLocaleString('vi-VN')}đ</p>
+                    <p className="font-bold text-[var(--color-text)]">{formatVND(room.price)}đ</p>
                   </td>
                   <td className="p-4 text-center">
                     <span className={`inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs font-bold neo-pressed ${

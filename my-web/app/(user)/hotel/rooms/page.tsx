@@ -5,6 +5,7 @@ import { BedDouble, CalendarCheck, Filter, Users } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import Select from "@/components/ui/select";
 import { getPublicRooms, PublicRoom } from "@/lib/hotel-storage";
+import { formatVND } from '@/lib/format';
 
 const roomImages = [
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80",
@@ -85,9 +86,9 @@ export default function HotelRoomsPage() {
                 <div className="mt-auto flex items-center justify-between gap-4 pt-6">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest opacity-50">Giá mỗi đêm</p>
-                    <p className="mt-1 text-2xl font-black">{room.price}đ</p>
+                    <p className="mt-1 text-2xl font-black">{formatVND(room.price)}đ</p>
                   </div>
-                  <Link href={`/hotel/book?room=${room.id}`} className="neo-button-primary flex items-center gap-2 px-5 py-3 text-sm">
+                  <Link href={`/hotel/rooms/${room.id}`} className="neo-button-primary flex items-center gap-2 px-5 py-3 text-sm">
                     <CalendarCheck size={18} />
                     Đặt phòng
                   </Link>

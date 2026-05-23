@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [hotelData, setHotelData] = useState({
     name: "Grand Luxe",
     description: "Hệ thống quản trị hạ tầng khách sạn cao cấp.",
-    coverImage: "https://images.unsplash.com/photo-1542314831-c6a4d402288b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
     logo: null as string | null
   });
 
@@ -23,7 +23,7 @@ export default function LoginPage() {
       setHotelData({
         name: localStorage.getItem("hotelName") || "Grand Luxe",
         description: localStorage.getItem("hotelDescription") || "Hệ thống quản trị hạ tầng khách sạn cao cấp.",
-        coverImage: localStorage.getItem("loginCoverImage") || "https://images.unsplash.com/photo-1542314831-c6a4d402288b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+        coverImage: localStorage.getItem("loginCoverImage") || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
         logo: localStorage.getItem("hotelLogo") || null
       });
     }, 0);
@@ -78,8 +78,8 @@ export default function LoginPage() {
       {/* Left Column - Hotel Image & Info */}
       <div className="hidden lg:flex w-1/2 relative overflow-hidden flex-col justify-end p-12">
         <div className="absolute inset-0 z-0">
-          <img src={hotelData.coverImage} alt="Hotel Cover" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
+          <img src={hotelData.coverImage} alt="Hotel Cover" className="w-full h-full object-cover" loading="eager" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10"></div>
         </div>
         
         <div className="relative z-10 text-white max-w-xl animate-in slide-in-from-bottom-8 duration-700 fade-in">

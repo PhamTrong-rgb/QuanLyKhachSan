@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Search, Plus, Edit, Trash2, BedDouble, Filter, Loader2 } from "lucide-react";
 import Modal from "@/components/ui/modal";
+import { formatVND } from '@/lib/format';
 import { apiService } from "@/services/api";
 import Select from "@/components/ui/select";
 import { useHotel } from "@/app/contexts/HotelContext";
@@ -132,7 +133,7 @@ export default function RoomsPage() {
                   {room.view}
                 </td>
                 <td className="px-6 py-4">
-                  <p className="font-bold text-sm text-slate-900">{room.price}đ</p>
+                  <p className="font-bold text-sm text-slate-900">{formatVND(room.price)}đ</p>
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border block w-max mx-auto ${

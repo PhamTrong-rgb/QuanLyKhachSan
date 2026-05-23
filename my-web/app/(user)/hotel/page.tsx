@@ -4,18 +4,19 @@ import Link from "next/link";
 import { CalendarCheck, DoorOpen, MapPin, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getPublicRooms, PublicRoom } from "@/lib/hotel-storage";
+import { formatVND } from '@/lib/format';
 
 export default function HotelHomePage() {
   const [hotelName, setHotelName] = useState("Grand Luxe");
   const [hotelDescription, setHotelDescription] = useState("Khách sạn cao cấp với không gian lưu trú tinh tế, dịch vụ tận tâm và trải nghiệm đặt phòng thuận tiện.");
-  const [coverImage, setCoverImage] = useState("https://images.unsplash.com/photo-1542314831-c6a4d402288b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
+  const [coverImage, setCoverImage] = useState("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
   const [rooms, setRooms] = useState<PublicRoom[]>([]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
       setHotelName(localStorage.getItem("hotelName") || "Grand Luxe");
       setHotelDescription(localStorage.getItem("hotelDescription") || "Khách sạn cao cấp với không gian lưu trú tinh tế, dịch vụ tận tâm và trải nghiệm đặt phòng thuận tiện.");
-      setCoverImage(localStorage.getItem("loginCoverImage") || "https://images.unsplash.com/photo-1542314831-c6a4d402288b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
+      setCoverImage(localStorage.getItem("loginCoverImage") || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
       setRooms(getPublicRooms().slice(0, 3));
     }, 0);
 
@@ -25,16 +26,16 @@ export default function HotelHomePage() {
   return (
     <div>
       <section className="relative min-h-[620px] overflow-hidden">
-        <img src={coverImage} alt={hotelName} className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-black/45" />
+        <img src={coverImage} alt={hotelName} className="absolute inset-0 h-full w-full object-cover" loading="eager" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/60" />
         <div className="relative mx-auto flex min-h-[620px] max-w-7xl flex-col justify-end px-5 pb-16 pt-24 text-white">
           <div className="max-w-3xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-bold backdrop-blur">
               <Star size={16} className="text-[var(--color-warning)]" />
               Trải nghiệm lưu trú cao cấp
             </div>
-            <h1 className="text-5xl font-black leading-tight md:text-7xl">{hotelName}</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-white/90">{hotelDescription}</p>
+            <h1 style={{ textShadow: '0 8px 30px rgba(0,0,0,0.6)' }} className="text-5xl font-black leading-tight md:text-7xl">{hotelName}</h1>
+            <p style={{ textShadow: '0 6px 20px rgba(0,0,0,0.45)' }} className="mt-5 max-w-2xl text-lg leading-8 text-white/95">{hotelDescription}</p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/hotel/book" className="rounded-xl bg-[var(--color-primary)] px-6 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:opacity-90">
                 Đặt phòng ngay
@@ -95,13 +96,13 @@ export default function HotelHomePage() {
                   <MapPin size={16} />
                   {room.view}
                 </div>
-                <div className="mt-5 flex items-center justify-between">
-                  <p className="text-lg font-black">{room.price}đ</p>
-                  <span className="flex items-center gap-2 text-sm font-bold text-[var(--color-primary)]">
-                    <CalendarCheck size={16} />
-                    Đặt phòng
-                  </span>
-                </div>
+                    <div className="mt-5 flex items-center justify-between">
+                      <p className="text-lg font-black">{formatVND(room.price)}đ</p>
+                      <Link href={`/hotel/rooms/${room.id}`} className="flex items-center gap-2 text-sm font-bold text-[var(--color-primary)]">
+                        <CalendarCheck size={16} />
+                        Xem thông tin
+                      </Link>
+                    </div>
               </div>
             </Link>
           ))}

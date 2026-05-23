@@ -30,7 +30,7 @@ export default function DashboardLayout({
   if (!isAuthenticated) return null; // Prevents flashing Dashboard before redirect
 
   return (
-    <div className="flex flex-col h-screen text-[var(--color-text)] bg-[var(--color-background)] overflow-hidden">
+    <div className="dashboard-root flex flex-col h-screen text-[var(--color-text)] bg-[var(--color-background)] overflow-hidden">
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />

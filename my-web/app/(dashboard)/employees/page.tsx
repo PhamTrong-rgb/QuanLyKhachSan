@@ -16,6 +16,9 @@ export default function EmployeesPage() {
   // Trạng thái cho Edit Modal
   const [editDept, setEditDept] = useState("");
   const [editStatus, setEditStatus] = useState("");
+  const [editRole, setEditRole] = useState("");
+  const [addDept, setAddDept] = useState("Khác");
+  const [addStatus, setAddStatus] = useState("active");
 
   const filteredEmployees = employees.filter(emp => {
     const matchSearch = emp.name.toLowerCase().includes(searchTerm.toLowerCase()) || emp.id.toLowerCase().includes(searchTerm.toLowerCase()) || emp.department.toLowerCase().includes(searchTerm.toLowerCase());
@@ -34,6 +37,7 @@ export default function EmployeesPage() {
     setSelectedEmployee(emp);
     setEditDept(emp.department);
     setEditStatus(emp.status);
+    setEditRole(emp.role || "");
   };
 
   return (
@@ -157,6 +161,10 @@ export default function EmployeesPage() {
                 <input type="text" defaultValue={selectedEmployee.phone} className="w-full neo-input" />
               </div>
               <div>
+                <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Chức vụ</label>
+                <input type="text" value={editRole} onChange={(e) => setEditRole(e.target.value)} className="w-full neo-input" />
+              </div>
+              <div>
                 <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Email</label>
                 <input type="email" defaultValue={selectedEmployee.email} className="w-full neo-input" />
               </div>
@@ -173,6 +181,7 @@ export default function EmployeesPage() {
                     { value: "Bếp", label: "Bếp" },
                     { value: "Kỹ thuật", label: "Kỹ thuật" },
                     { value: "An ninh", label: "An ninh" },
+                    { value: "Bảo vệ", label: "Bảo vệ" },
                     { value: "Tài chính", label: "Tài chính" },
                     { value: "Nhân sự", label: "Nhân sự" },
                     { value: "Ban Giám Đốc", label: "Ban Giám Đốc" },
@@ -205,8 +214,9 @@ export default function EmployeesPage() {
                 <button onClick={() => {
                   updateEmployee({
                     ...selectedEmployee,
-                    department: editDept,
-                    status: editStatus
+                      department: editDept,
+                      status: editStatus,
+                      role: editRole
                   });
                   setSelectedEmployee(null);
                 }} className="px-6 py-2 neo-button-primary flex items-center gap-2 active:scale-95 transition-transform">
@@ -225,19 +235,26 @@ export default function EmployeesPage() {
             name: { value: string };
             phone: { value: string };
             role: { value: string };
+            department: { value: string };
+            email: { value: string };
+            status: { value: string };
           };
           const newEmp = {
             id: `NV${String(employees.length + 1).padStart(3, '0')}`,
             name: target.name.value,
             phone: target.phone.value,
             role: target.role.value,
-            department: "Khác",
-            email: "",
-            status: "active",
+            department: addDept || "Khác",
+            email: target.email.value || "",
+            status: addStatus || "active",
             avatar: target.name.value.charAt(0).toUpperCase()
           };
           addEmployee(newEmp);
+          // close add modal and open details modal for the created employee (merge flows)
           setIsAdding(false);
+          setSelectedEmployee(newEmp);
+          setEditDept(newEmp.department);
+          setEditStatus(newEmp.status);
         }} className="space-y-5">
           <div>
             <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Họ và Tên</label>
@@ -253,6 +270,49 @@ export default function EmployeesPage() {
               <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Chức vụ</label>
               <input required name="role" type="text" placeholder="Chức vụ" className="w-full neo-input" />
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Phòng ban</label>
+              <Select
+                value={addDept}
+                onChange={(v) => setAddDept(String(v))}
+                className="w-full neo-input py-2.5 px-4"
+                options={[
+                  { value: "Lễ tân", label: "Lễ tân" },
+                  { value: "Buồng phòng", label: "Buồng phòng" },
+                  { value: "Nhà hàng", label: "Nhà hàng" },
+                  { value: "Bếp", label: "Bếp" },
+                  { value: "Kỹ thuật", label: "Kỹ thuật" },
+                  { value: "An ninh", label: "An ninh" },
+                  { value: "Bảo vệ", label: "Bảo vệ" },
+                  { value: "Tài chính", label: "Tài chính" },
+                  { value: "Nhân sự", label: "Nhân sự" },
+                  { value: "Ban Giám Đốc", label: "Ban Giám Đốc" },
+                  { value: "Khác", label: "Khác" }
+                ]}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Trạng thái</label>
+              <Select
+                value={addStatus}
+                onChange={(v) => setAddStatus(String(v))}
+                className="w-full neo-input py-2.5 px-4"
+                options={[
+                  { value: "active", label: "Đang làm việc" },
+                  { value: "probation", label: "Thử việc" },
+                  { value: "on_leave", label: "Nghỉ phép" },
+                  { value: "inactive", label: "Đã nghỉ" }
+                ]}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-[var(--color-text)] opacity-70 uppercase mb-2">Email</label>
+            <input name="email" type="email" placeholder="Email (không bắt buộc)" className="w-full neo-input" />
           </div>
 
           <div className="pt-6 border-t border-white/20 flex justify-end gap-3">
