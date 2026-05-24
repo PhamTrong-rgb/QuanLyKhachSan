@@ -1,0 +1,197 @@
+{
+  "rooms": [
+    {
+      "id": "101",
+      "type": "Tiêu chuẩn",
+      "status": "Sẵn sàng",
+      "price": "2.500.000",
+      "maxGuests": 2,
+      "view": "Thành phố"
+    },
+    {
+      "id": "102",
+      "type": "Cao cấp",
+      "status": "Đang phục vụ",
+      "price": "3.800.000",
+      "maxGuests": 3,
+      "view": "Biển"
+    },
+    {
+      "id": "103",
+      "type": "Thượng lưu",
+      "status": "Sẵn sàng",
+      "price": "8.500.000",
+      "maxGuests": 4,
+      "view": "Biển & Hồ Bơi"
+    },
+    {
+      "id": "104",
+      "type": "Tiêu chuẩn",
+      "status": "Đang dọn",
+      "price": "2.500.000",
+      "maxGuests": 2,
+      "view": "Nội khu"
+    },
+    {
+      "id": "201",
+      "type": "Cao cấp",
+      "status": "Sẵn sàng",
+      "price": "3.800.000",
+      "maxGuests": 3,
+      "view": "Biển"
+    },
+    {
+      "id": "205",
+      "type": "Tổng thống",
+      "status": "Đang dọn",
+      "price": "25.000.000",
+      "maxGuests": 6,
+      "view": "Toàn cảnh VIP"
+    }
+  ],
+  "guests": [
+    {
+      "id": "KH001",
+      "fullName": "Admin System",
+      "phonenumber": "0933852823",
+      "email": ""
+    }
+  ],
+  "employees": [
+    {
+      "id": "NV003",
+      "name": "Trần Thị Mai",
+      "phone": "055487326",
+      "role": "Phục vụ bếp",
+      "department": "Bếp",
+      "email": "",
+      "status": "active",
+      "avatar": "T"
+    },
+    {
+      "id": "NV002",
+      "name": "Nguyễn Minh Nam",
+      "phone": "097656421",
+      "role": "Lễ tân khách sạn",
+      "department": "Lễ tân",
+      "email": "",
+      "status": "active",
+      "avatar": "N"
+    },
+    {
+      "id": "NV001",
+      "name": "Trần A Mẫn",
+      "phone": "028876065",
+      "role": "Lao công  dọn dẹp",
+      "department": "Buồng phòng",
+      "email": "",
+      "status": "active",
+      "avatar": "T"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "WEB-0001",
+      "guest": "Admin System",
+      "phone": "0933852823",
+      "room": "101",
+      "checkIn": "2026-05-24",
+      "checkOut": "2026-05-30",
+      "status": "Đã xác nhận",
+      "description": "Đặt phòng từ trang người dùng",
+      "adminNote": ""
+    }
+  ],
+  "transactions": [
+    {
+      "id": "TXN-4046",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-6248 (Admin System)",
+      "amount": 15150000,
+      "date": "24/5/2026",
+      "time": "18:52",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    },
+    {
+      "id": "TXN-8327",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-6248 (Admin System)",
+      "amount": 15150000,
+      "date": "24/5/2026",
+      "time": "18:52",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    },
+    {
+      "id": "TXN-5982",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-6248 (Admin System)",
+      "amount": 15150000,
+      "date": "24/5/2026",
+      "time": "18:52",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    },
+    {
+      "id": "TXN-4915",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-7719 (Nguyên An)",
+      "amount": 12050000,
+      "date": "23/5/2026",
+      "time": "22:30",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    },
+    {
+      "id": "TXN-5215",
+      "type": "income",
+      "description": "Thanh toán hóa đơn INV-7673 (Nguyên An)",
+      "amount": 11400000,
+      "date": "23/5/2026",
+      "time": "22:02",
+      "status": "completed",
+      "paymentMethod": "Cash",
+      "user": "SYSTEM",
+      "note": ""
+    }
+  ],
+  "invoices": [
+    {
+      "id": "INV-2963",
+      "guest": "Nguyễn Thanh Tú",
+      "roomId": "101",
+      "amount": "15.150.000",
+      "status": "Chưa thanh toán",
+      "date": "24/5/2026",
+      "details": [
+        {
+          "name": "Tiền phòng 101 (6 đêm)",
+          "price": 15000000
+        },
+        {
+          "name": "Dịch vụ: Gọi Đồ Ăn",
+          "price": 150000
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "id": "SRV-262",
+      "guest": "Nguyễn Thanh Tú",
+      "room": "101",
+      "type": "Gọi Đồ Ăn",
+      "time": "19:09",
+      "status": "Chờ xử lý"
+    }
+  ]
+}

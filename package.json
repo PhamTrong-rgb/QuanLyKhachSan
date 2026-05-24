@@ -1,0 +1,10 @@
+{
+    "name": "hotel-management-parent",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "npm run dev --prefix my-web",
+        "build": "npm run build --prefix my-web",
+        "start": "npm run start --prefix my-web"
+    }
+}

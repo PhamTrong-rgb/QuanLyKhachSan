@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id       String  @id @db.NVarChar(50)
+  username String  @unique @db.NVarChar(50)
+  password String  @db.NVarChar(255)
+  role     String? @db.NVarChar(20)
+  avatar   String? @db.NVarChar(Max)
+}
+
+model Staff {
+  id     String  @id @db.NVarChar(50)
+  name   String? @db.NVarChar(100)
+  role   String? @db.NVarChar(50)
+  avatar String? @db.NVarChar(Max)
+}
+
+model Rooms {
+  id         String   @id @db.NVarChar(50)
+  roomNumber Int
+  type       String?  @db.NVarChar(50)
+  price      Decimal? @db.Decimal(18, 2)
+  status     String?  @db.NVarChar(20)
+  image      String?  @db.NVarChar(Max)
+}
+
+model Customers {
+  id          String  @id @db.NVarChar(50)
+  fullName    String? @db.NVarChar(100)
+  phonenumber String? @db.VarChar(20)
+  email       String? @db.VarChar(100)
+  idCard      String? @db.VarChar(20)
+}
+
+model Services {
+  id          String   @id @db.NVarChar(50)
+  serviceName String?  @db.NVarChar(100)
+  price       Decimal? @db.Decimal(18, 2)
+  description String?  @db.NVarChar(255)
+}
+
+model Bookings {
+  id           String    @id @db.NVarChar(50)
+  roomId       Int?
+  customerName String?   @db.NVarChar(100)
+  checkIn      DateTime? @db.DateTime
+  checkOut     DateTime? @db.DateTime
+  totalAmount  Decimal?  @db.Decimal(18, 2)
+}
+
+model Transactions {
+  id          Int       @id @default(autoincrement())
+  type        String?   @db.NVarChar(50)
+  amount      Decimal?  @db.Decimal(18, 2)
+  category    String?   @db.NVarChar(50)
+  bookingId   Int?
+  description String?   @db.NVarChar(Max)
+  createdAt   DateTime? @default(now()) @db.DateTime
+}
