@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "rooms": [
     {
       "id": "101",
@@ -54,6 +55,14 @@
       "id": "KH001",
       "fullName": "Admin System",
       "phonenumber": "0933852823",
+=======
+  "rooms": [],
+  "guests": [
+    {
+      "id": "KH001",
+      "fullName": "Nguyên An",
+      "phonenumber": "099876355",
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
       "email": ""
     }
   ],
@@ -92,11 +101,19 @@
   "bookings": [
     {
       "id": "WEB-0001",
+<<<<<<< HEAD
       "guest": "Admin System",
       "phone": "0933852823",
       "room": "101",
       "checkIn": "2026-05-24",
       "checkOut": "2026-05-30",
+=======
+      "guest": "Nguyên An",
+      "phone": "099876355",
+      "room": "102",
+      "checkIn": "2026-05-22",
+      "checkOut": "2026-05-25",
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
       "status": "Đã xác nhận",
       "description": "Đặt phòng từ trang người dùng",
       "adminNote": ""
@@ -104,6 +121,7 @@
   ],
   "transactions": [
     {
+<<<<<<< HEAD
       "id": "TXN-4046",
       "type": "income",
       "description": "Thanh toán hóa đơn INV-6248 (Admin System)",
@@ -140,6 +158,8 @@
       "note": ""
     },
     {
+=======
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
       "id": "TXN-4915",
       "type": "income",
       "description": "Thanh toán hóa đơn INV-7719 (Nguyên An)",
@@ -166,6 +186,7 @@
   ],
   "invoices": [
     {
+<<<<<<< HEAD
       "id": "INV-2963",
       "guest": "Nguyễn Thanh Tú",
       "roomId": "101",
@@ -176,6 +197,22 @@
         {
           "name": "Tiền phòng 101 (6 đêm)",
           "price": 15000000
+=======
+      "id": "INV-7719",
+      "guest": "Nguyên An",
+      "roomId": "102",
+      "amount": "12.050.000",
+      "status": "Đã thanh toán",
+      "date": "23/5/2026",
+      "details": [
+        {
+          "name": "Tiền phòng 102 (3 đêm)",
+          "price": 11400000
+        },
+        {
+          "name": "Dịch vụ: Massage thư giãn",
+          "price": 500000
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
         },
         {
           "name": "Dịch vụ: Gọi Đồ Ăn",
@@ -186,12 +223,29 @@
   ],
   "requests": [
     {
+<<<<<<< HEAD
       "id": "SRV-262",
       "guest": "Nguyễn Thanh Tú",
       "room": "101",
       "type": "Gọi Đồ Ăn",
       "time": "19:09",
       "status": "Chờ xử lý"
+=======
+      "id": "SRV-800",
+      "guest": "Nguyên An",
+      "room": "102",
+      "type": "Massage thư giãn",
+      "time": "22:20",
+      "status": "Hoàn tất"
+    },
+    {
+      "id": "SRV-584",
+      "guest": "Nguyên An",
+      "room": "102",
+      "type": "Gọi Đồ Ăn",
+      "time": "22:07",
+      "status": "Hoàn tất"
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
     }
   ]
 }

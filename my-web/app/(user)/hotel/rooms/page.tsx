@@ -6,7 +6,10 @@ import { useEffect, useMemo, useState } from "react";
 import Select from "@/components/ui/select";
 import { getPublicRooms, PublicRoom } from "@/lib/hotel-storage";
 import { formatVND } from '@/lib/format';
+<<<<<<< HEAD
 import { useHotel } from "@/app/contexts/HotelContext";
+=======
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
 
 const roomImages = [
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80",
@@ -15,10 +18,21 @@ const roomImages = [
 ];
 
 export default function HotelRoomsPage() {
+<<<<<<< HEAD
   const { rooms: contextRooms } = useHotel();
   const rooms = useMemo(() => (contextRooms && contextRooms.length > 0) ? contextRooms : getPublicRooms(), [contextRooms]);
   const [statusFilter, setStatusFilter] = useState("all");
 
+=======
+  const [rooms, setRooms] = useState<PublicRoom[]>([]);
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setRooms(getPublicRooms()), 0);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
   const filteredRooms = useMemo(() => {
     if (statusFilter === "all") return rooms;
     return rooms.filter((room) => room.status === statusFilter);
@@ -63,9 +77,13 @@ export default function HotelRoomsPage() {
                     <h2 className="mt-2 text-2xl font-black">{room.type}</h2>
                   </div>
                   <span className={`rounded-xl px-3 py-1.5 text-xs font-black ${
+<<<<<<< HEAD
                     room.status === "Sẵn sàng" ? "bg-emerald-50 text-emerald-700" :
                     room.status === "Đang phục vụ" ? "bg-amber-50 text-amber-700 font-bold border border-amber-200" :
                     "bg-slate-100 text-slate-600 font-bold border border-slate-200"
+=======
+                    room.status === "Sẵn sàng" ? "bg-emerald-50 text-emerald-700" : "bg-white text-slate-600"
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
                   }`}>
                     {room.status}
                   </span>
@@ -87,6 +105,7 @@ export default function HotelRoomsPage() {
                     <p className="text-xs font-bold uppercase tracking-widest opacity-50">Giá mỗi đêm</p>
                     <p className="mt-1 text-2xl font-black">{formatVND(room.price)}đ</p>
                   </div>
+<<<<<<< HEAD
                   {room.status === "Sẵn sàng" ? (
                     <Link href={`/hotel/book?room=${room.id}`} className="neo-button-primary flex items-center gap-2 px-5 py-3 text-sm">
                       <CalendarCheck size={18} />
@@ -101,6 +120,12 @@ export default function HotelRoomsPage() {
                       Không thể đặt
                     </button>
                   )}
+=======
+                  <Link href={`/hotel/rooms/${room.id}`} className="neo-button-primary flex items-center gap-2 px-5 py-3 text-sm">
+                    <CalendarCheck size={18} />
+                    Đặt phòng
+                  </Link>
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
                 </div>
               </div>
             </div>

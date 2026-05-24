@@ -46,6 +46,7 @@ export default function HotelBookingPage() {
     [combinedRooms, formData.room],
   );
 
+<<<<<<< HEAD
   const isInvalidDateRange = useMemo(() => {
     if (!formData.checkIn || !formData.checkOut) return false;
     const fCI = new Date(formData.checkIn);
@@ -95,6 +96,11 @@ export default function HotelBookingPage() {
       return;
     }
 
+=======
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
     const bookingId = `WEB-${String(bookings.length + 1).padStart(4, "0")}`;
     const booking = {
       id: bookingId,
@@ -180,7 +186,11 @@ export default function HotelBookingPage() {
                 className="w-full text-sm font-bold"
                 options={combinedRooms.map((room) => ({
                   value: room.id,
+<<<<<<< HEAD
                   label: `Phòng ${room.id} - ${room.type} (${room.status})`,
+=======
+                  label: `Phòng ${room.id} - ${room.type}`,
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
                 }))}
               />
             </div>
@@ -218,6 +228,7 @@ export default function HotelBookingPage() {
             />
           </div>
 
+<<<<<<< HEAD
           {isInvalidDateRange && (
             <div className="md:col-span-2 p-4 rounded-xl border border-[var(--color-danger)] bg-red-50 text-[var(--color-danger)] text-sm font-black flex items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
               <span>⚠️</span>
@@ -239,6 +250,8 @@ export default function HotelBookingPage() {
             </div>
           )}
 
+=======
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
           <div className="md:col-span-2">
             <button type="submit" className="neo-button-primary flex w-full items-center justify-center gap-2 px-6 py-4 text-sm uppercase tracking-widest">
               <CalendarCheck size={18} />

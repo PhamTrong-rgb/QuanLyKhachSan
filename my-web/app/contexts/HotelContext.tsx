@@ -333,6 +333,7 @@ export function HotelProvider({ children }: { children: ReactNode }) {
   const deleteInvoice = (id: string) => { const newVal = invoices.filter(i => i.id !== id); setInvoicesState(newVal); execDB('invoices', 'delete', id); notify("Xóa hóa đơn", `Đã xóa hóa đơn ${id}`, "alert", "/invoices"); };
 
   // CRUD for Requests
+<<<<<<< HEAD
   const addRequest = (req: ServiceRequest) => { 
     const newVal = [req, ...requests]; 
     setRequestsState(newVal); 
@@ -436,6 +437,9 @@ export function HotelProvider({ children }: { children: ReactNode }) {
       console.error("Error auto-updating invoice for service request:", e);
     }
   };
+=======
+  const addRequest = (req: ServiceRequest) => { const newVal = [req, ...requests]; setRequestsState(newVal); execDB('requests', 'add', req); notify("Yêu cầu dịch vụ mới", `Phòng ${req.room} yêu cầu ${req.type}`, "service", "/services"); };
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
   const updateRequest = (req: ServiceRequest) => { const newVal = requests.map(r => r.id === req.id ? req : r); setRequestsState(newVal); execDB('requests', 'update', req); notify("Trạng thái dịch vụ", `Yêu cầu ${req.id} đã thay đổi`, "service", "/services"); };
   const deleteRequest = (id: string) => { const newVal = requests.filter(r => r.id !== id); setRequestsState(newVal); execDB('requests', 'delete', id); notify("Xóa yêu cầu", `Đã xóa yêu cầu ${id}`, "alert", "/services"); };
 

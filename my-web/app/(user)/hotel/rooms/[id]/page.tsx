@@ -2,11 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublicRooms } from "@/lib/hotel-storage";
 import { formatVND } from '@/lib/format';
+<<<<<<< HEAD
 import { getDBData } from "@/app/actions/db";
 
 export default async function RoomDetailPage({ params }: { params: { id: string } }) {
   const { rooms: dbRooms } = await getDBData();
   const rooms = (dbRooms && dbRooms.length > 0) ? dbRooms : getPublicRooms();
+=======
+
+export default function RoomDetailPage({ params }: { params: { id: string } }) {
+  const rooms = getPublicRooms();
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
   const room = rooms.find(r => r.id === params.id);
   if (!room) return notFound();
 
@@ -37,6 +43,7 @@ export default async function RoomDetailPage({ params }: { params: { id: string 
           </div>
 
           <div className="mt-6 flex gap-3">
+<<<<<<< HEAD
             {room.status === "Sẵn sàng" ? (
               <Link href={`/hotel/book?room=${room.id}`} className="neo-button-primary px-5 py-3 rounded-xl flex items-center justify-center">
                 Đặt phòng
@@ -47,6 +54,10 @@ export default async function RoomDetailPage({ params }: { params: { id: string 
               </span>
             )}
             <Link href="/hotel/rooms" className="neo-button px-5 py-3 rounded-xl flex items-center justify-center">Quay lại</Link>
+=======
+            <Link href={`/hotel/book?room=${room.id}`} className="neo-button-primary px-5 py-3 rounded-xl">Đặt phòng</Link>
+            <Link href="/hotel/rooms" className="neo-button px-5 py-3 rounded-xl">Quay lại</Link>
+>>>>>>> 0922e915a5a472982d9031fedd82c619cb6d1b40
           </div>
         </div>
       </div>
