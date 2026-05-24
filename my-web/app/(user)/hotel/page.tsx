@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CalendarCheck, DoorOpen, MapPin, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 import { getPublicRooms, PublicRoom } from "@/lib/hotel-storage";
 import { formatVND } from '@/lib/format';
 
@@ -11,6 +12,7 @@ export default function HotelHomePage() {
   const [hotelDescription, setHotelDescription] = useState("Khách sạn cao cấp với không gian lưu trú tinh tế, dịch vụ tận tâm và trải nghiệm đặt phòng thuận tiện.");
   const [coverImage, setCoverImage] = useState("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
   const [rooms, setRooms] = useState<PublicRoom[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -79,33 +81,46 @@ export default function HotelHomePage() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {rooms.map((room) => (
-            <Link href={`/hotel/book?room=${room.id}`} key={room.id} className="neo-surface block overflow-hidden transition hover:scale-[1.01]">
-              <div className="h-44 bg-[var(--color-primary)]/10">
-                <img src={`https://images.unsplash.com/photo-${room.id === "205" ? "1590490360182-c33d57733427" : room.id === "103" ? "1591088398332-8a7791972843" : "1566073771259-6a8506099945"}?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80`} alt={room.type} className="h-full w-full object-cover" />
-              </div>
-              <div className="p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-primary)]">Phòng {room.id}</p>
-                    <h3 className="mt-1 text-xl font-black">{room.type}</h3>
-                  </div>
-                  <span className="rounded-lg bg-white px-3 py-1 text-xs font-black text-[var(--color-primary)]">{room.status}</span>
+          {rooms.map((room) => {
+            return (
+              <div
+                key={room.id}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    router.push(`/hotel/book?room=${room.id}`);
+                  }
+                }}
+                onClick={() => router.push(`/hotel/book?room=${room.id}`)}
+                className="neo-surface block overflow-hidden transition hover:scale-[1.01] cursor-pointer"
+              >
+                <div className="h-44 bg-[var(--color-primary)]/10">
+                  <img src={`https://images.unsplash.com/photo-${room.id === "205" ? "1590490360182-c33d57733427" : room.id === "103" ? "1591088398332-8a7791972843" : "1566073771259-6a8506099945"}?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80`} alt={room.type} className="h-full w-full object-cover" />
                 </div>
-                <div className="mt-4 flex items-center gap-2 text-sm opacity-70">
-                  <MapPin size={16} />
-                  {room.view}
-                </div>
-                    <div className="mt-5 flex items-center justify-between">
-                      <p className="text-lg font-black">{formatVND(room.price)}đ</p>
-                      <Link href={`/hotel/rooms/${room.id}`} className="flex items-center gap-2 text-sm font-bold text-[var(--color-primary)]">
-                        <CalendarCheck size={16} />
-                        Xem thông tin
-                      </Link>
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-primary)]">Phòng {room.id}</p>
+                      <h3 className="mt-1 text-xl font-black">{room.type}</h3>
                     </div>
+                    <span className="rounded-lg bg-white px-3 py-1 text-xs font-black text-[var(--color-primary)]">{room.status}</span>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-sm opacity-70">
+                    <MapPin size={16} />
+                    {room.view}
+                  </div>
+                  <div className="mt-5 flex items-center justify-between">
+                    <p className="text-lg font-black">{formatVND(room.price)}đ</p>
+                    <Link href={`/hotel/rooms/${room.id}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-2 text-sm font-bold text-[var(--color-primary)]">
+                      <CalendarCheck size={16} />
+                      Xem thông tin
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
